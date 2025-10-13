@@ -48,7 +48,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameTerminator.cs" />
     <Compile Include="GameTimeTracker.cs" />
+    <Compile Include="IdleTimerConfig.cs" />
+    <Compile Include="IdleTracker.cs" />
     <Compile Include="KioskApp.cs" />
     <Compile Include="KioskAppSettings.cs" />
     <Compile Include="KioskAppSettingsView.xaml.cs">
@@ -58,6 +61,7 @@
       <DependentUpon>TimeLimitPopup.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimeTrackingConfig.cs" />
+    <Compile Include="WindowsInputMonitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +70,9 @@
     </None>
     <None Include="packages.config" />
     <None Include="TimeTrackingConfig.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="IdleTimerConfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

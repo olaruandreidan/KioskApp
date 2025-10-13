@@ -1,14 +1,22 @@
 # KioskApp - Playnite Time Tracking Extension
 
-A Playnite plugin that tracks game playtime and displays a modal popup when a configured time limit is reached.
+A Playnite plugin that tracks game playtime and monitors user activity to enforce healthy gaming habits.
 
 ## Features
 
+### Time Limit Tracking
 - Tracks time spent in games during each session
 - Displays a blocking popup window when time limit is reached
 - Configurable time limits per game or a global default
 - Custom images can be displayed in the popup for each game
 - Popup appears on top of game windows (including fullscreen games)
+
+### Idle Detection & Auto-Close
+- Monitors keyboard and mouse activity to detect idle users
+- Automatically closes games when user has been inactive for a configured period
+- Configurable idle timeouts per game or a global default
+- Shows notification when a game is closed due to inactivity
+- Helps prevent games from running indefinitely when users forget to close them
 
 ## Installation
 
@@ -107,6 +115,79 @@ Once you've verified it works:
 3. Prepare custom warning images for each game (optional)
 4. Save and restart Playnite
 
+## Idle Timer Configuration
+
+The idle timer monitors user activity and automatically closes games when no input is detected for a configured period.
+
+### Locate the Idle Timer Configuration
+
+The idle timer uses a separate configuration file located in the same directory as the time tracking config:
+
+```
+C:\Users\[YourUsername]\AppData\Local\Playnite\ExtensionsData\f6833c50-87d1-4359-a183-49580f6152b3\IdleTimerConfig.json
+```
+
+Check Playnite logs for the exact path: `Idle timer config file location: [path]`
+
+### Idle Timer Configuration Structure
+
+```json
+{
+  "Enabled": true,
+  "DefaultIdleTimeoutMinutes": 15,
+  "CheckIntervalSeconds": 10,
+  "GameIdleTimeouts": [
+    {
+      "GameId": "a4bca966-17e7-4b2f-845a-e0e5fac079fd",
+      "GameName": "Pentiment",
+      "IdleTimeoutMinutes": 20
+    },
+    {
+      "GameId": "c7ef1d99-39g9-6d4h-067c-h2h7hce291hf",
+      "GameName": "Strategy Game",
+      "IdleTimeoutMinutes": 30
+    }
+  ]
+}
+```
+
+### Configuration Options
+
+- **`Enabled`**: Set to `true` to enable idle detection, `false` to disable it entirely
+- **`DefaultIdleTimeoutMinutes`**: Global idle timeout for all games (in minutes)
+- **`CheckIntervalSeconds`**: How often to check for idle activity (default: 10 seconds)
+- **`GameIdleTimeouts`**: Array of game-specific idle timeout configurations
+  - **`GameId`**: The game's unique identifier (GUID) from the logs
+  - **`GameName`**: Friendly name for reference only
+  - **`IdleTimeoutMinutes`**: Idle timeout for this specific game (overrides default)
+
+### How Idle Detection Works
+
+1. **Activity Monitoring**: The plugin uses Windows API to detect keyboard and mouse input
+2. **Idle Check**: Every `CheckIntervalSeconds`, the plugin checks how long the user has been idle
+3. **Timeout Action**: When idle time exceeds the configured timeout:
+   - The game process is terminated (graceful close attempted first, then force kill if needed)
+   - A notification appears informing the user the game was closed due to inactivity
+   - Idle tracking stops
+
+**Important Notes:**
+- Idle detection tracks **system-wide** keyboard/mouse activity (not just game-specific)
+- If you use your computer for anything (even outside the game), the idle timer resets
+- Gamepad/controller input is currently **not detected** (keyboard/mouse only)
+- Some games launched through launchers (Steam, Epic) may have invalid process IDs and won't be auto-closed
+
+### Testing Idle Timer
+
+1. Set a very short idle timeout (e.g., 1-2 minutes) in the config
+2. Save the config and restart Playnite
+3. Start a game
+4. Don't touch keyboard or mouse for the configured duration
+5. The game should automatically close and show a notification
+
+### Disabling Idle Timer
+
+To disable idle detection entirely, set `"Enabled": false` in `IdleTimerConfig.json`.
+
 ## Example Configuration
 
 ```json
@@ -179,7 +260,30 @@ In this example:
    - Missing quotes around strings
    - Trailing commas (not allowed in JSON)
 
+### Idle Timer Not Working
+
+**Problem**: Game doesn't close after being idle.
+
+**Solution**:
+1. Check that `"Enabled": true` in IdleTimerConfig.json
+2. Verify the game process ID is valid (check logs for "Invalid process ID" warnings)
+3. Ensure you're not moving the mouse or pressing keys during the idle period
+4. Remember: ANY system activity resets the idle timer, not just game-specific activity
+5. Check Playnite logs for idle detection messages
+
+### Game Closes Unexpectedly
+
+**Problem**: Game closes even when actively playing.
+
+**Solution**:
+1. Check if idle timeout is too short
+2. If using gamepad/controller, note that only keyboard/mouse input is detected
+3. Increase the idle timeout or disable idle detection for that game
+4. Check logs to confirm it's the idle timer causing the closure
+
 ## How It Works
+
+### Time Limit Tracking
 
 1. When a game starts, the plugin begins tracking the session time
 2. A timer checks every 30 seconds if the configured time limit has been reached
@@ -189,6 +293,20 @@ In this example:
    - The popup displays the game name, a custom image (if configured), and a message
    - The user must click "OK" to dismiss the popup
 4. When the game stops, tracking ends and the session data is cleared
+
+### Idle Detection
+
+1. When a game starts, the plugin also begins monitoring user activity (if enabled)
+2. Uses Windows API (`GetLastInputInfo`) to track time since last keyboard/mouse input
+3. A timer checks idle time at the configured interval (default: every 10 seconds)
+4. When idle time exceeds the configured timeout:
+   - Idle monitoring stops
+   - The game process is terminated:
+     - First attempts graceful shutdown (`CloseMainWindow`)
+     - Waits up to 10 seconds
+     - If still running, forces termination (`Kill`)
+   - A notification is displayed to inform the user
+5. When the game stops (normally or via idle timeout), idle monitoring ends
 
 ## Development
 

@@ -1,0 +1,12 @@
+{
+  "Enabled": true,
+  "DefaultIdleTimeoutMinutes": 15,
+  "CheckIntervalSeconds": 10,
+  "GameIdleTimeouts": [
+    {
+      "GameId": "00000000-0000-0000-0000-000000000000",
+      "GameName": "Example Game (replace with actual game GUID - check logs for Game IDs)",
+      "IdleTimeoutMinutes": 20
+    }
+  ]
+}
