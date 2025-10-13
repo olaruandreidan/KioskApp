@@ -1,0 +1,11 @@
+{
+  "DefaultTimeLimitMinutes": 60,
+  "GameConfigurations": [
+    {
+      "GameId": "00000000-0000-0000-0000-000000000000",
+      "GameName": "Example Game Name (for reference - check logs for actual Game IDs)",
+      "TimeLimitMinutes": 90,
+      "PopupImagePath": "C:\\Images\\example_game.png"
+    }
+  ]
+}

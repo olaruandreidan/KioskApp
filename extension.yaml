@@ -1,6 +1,6 @@
 ﻿Id: KioskApp_f6833c50-87d1-4359-a183-49580f6152b3
-Name: Generic Plugin
-Author: John Doe
+Name: KioskApp
+Author: AndreiOlaru
 Version: 1.0
 Module: KioskApp.dll
 Type: GenericPlugin
