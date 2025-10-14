@@ -38,7 +38,13 @@
                        FontSize="14"
                        TextAlignment="Center"
                        TextWrapping="Wrap"
-                       Foreground="#CCCCCC"/>
+                       Foreground="#CCCCCC"
+                       Margin="0,0,0,10"/>
+            <TextBlock x:Name="CountdownText"
+                       FontSize="12"
+                       TextAlignment="Center"
+                       Foreground="#FF9999"
+                       FontStyle="Italic"/>
         </StackPanel>
 
         <!-- Button -->
