@@ -21,8 +21,8 @@ namespace KioskApp
             parentWindow = parent;
 
             // Set message text
-            MessageText.Text = $"Time limit reached for {gameName}";
-            SubMessageText.Text = "Please take a break and return later.";
+            MessageText.Text = $"We hope you enjoy playing {gameName}";
+            SubMessageText.Text = "Now it's your chance to scan the QR code to continue your Gamify TAG journey";
 
             // Load image if path is provided
             LoadImage(imagePath);
