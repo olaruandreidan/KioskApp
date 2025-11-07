@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              d:DesignHeight="400" d:DesignWidth="600">
-    <Grid>
+    <Grid Background="#ffda02">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
@@ -33,17 +33,18 @@
                        FontWeight="Bold"
                        TextAlignment="Center"
                        TextWrapping="Wrap"
+                       Foreground="#231539"
                        Margin="0,0,0,10"/>
             <TextBlock x:Name="SubMessageText"
                        FontSize="26"
                        TextAlignment="Center"
                        TextWrapping="Wrap"
-                       Foreground="#CCCCCC"
+                       Foreground="#231539"
                        Margin="0,0,0,10"/>
             <TextBlock x:Name="CountdownText"
                        FontSize="20"
                        TextAlignment="Center"
-                       Foreground="#FF9999"
+                       Foreground="#3000f9"
                        FontStyle="Italic"/>
         </StackPanel>
 
